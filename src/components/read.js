@@ -1,12 +1,33 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Table, Button } from 'semantic-ui-react';
+import { Button, Checkbox, Form, Table } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 
 export default function Read() {
+    const crypto = require("crypto");
+    const firstId = crypto.randomBytes(16).toString("hex");
     const [APIData, setAPIData] = useState([]);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [checkbox, setCheckbox] = useState(false);
+
+    const postData = async() => {
+        axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product`, {
+            firstId,
+            firstName,
+            lastName,
+            checkbox 
+        })
+        window.location.reload();
+    }
+
     useEffect(() => {
-        axios.get(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/products`)
+        axios.get(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/products`,
+        {
+            header : {
+                "Authorization" : localStorage.getItem('idToken')
+            }
+        })
         .then((response) => {
                 if (response.status !== 200) {
                     throw Error(response.statusText);
@@ -17,22 +38,26 @@ export default function Read() {
             })
     }, []);
 
-    const setData = (data) => {
-        let { id, firstName, lastName, checkbox } = data;
-        localStorage.setItem('ID', id);
-        localStorage.setItem('First Name', firstName);
-        localStorage.setItem('Last Name', lastName);
-        localStorage.setItem('Checkbox Value', checkbox)
-    }
-
     const onDelete = (id) => {
         axios.delete(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product?id=${id}`, 
-        { 
+        {   
+            header : {
+                "Authorization" : localStorage.getItem('idToken')
+            },
             params : { "id" : id }
         }).then(() => {
             setAPIData(APIData.filter(d => d.id !== id));
         })
     }
+
+    const setData = (data) => {
+        let { targetId, newFirstName, newLastName, newCheckbox } = data;
+        localStorage.setItem('ID', targetId)
+        localStorage.setItem('First Name', newFirstName);
+        localStorage.setItem('Last Name', newLastName);
+        localStorage.setItem('Checkbox Value', newCheckbox)
+    }
+
 
     return (
         <div>
@@ -67,6 +92,20 @@ export default function Read() {
                     })}
                 </Table.Body>
             </Table>
+            <Form className="create-form">
+                <Form.Field>
+                    <label>First Name</label>
+                    <input placeholder='First Name' onChange={(e) => setFirstName(e.target.value)}/>
+                </Form.Field>
+                <Form.Field>
+                    <label>Last Name</label>
+                    <input placeholder='Last Name' onChange={(e) => setLastName(e.target.value)}/>
+                </Form.Field>
+                <Form.Field>
+                    <Checkbox label='I agree to the Terms and Conditions' onChange={(e) => setCheckbox(!checkbox)}/>
+                </Form.Field>
+                <Button onClick={postData} type='submit'>Submit</Button>
+            </Form>
         </div>
     )
 }

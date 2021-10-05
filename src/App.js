@@ -1,6 +1,5 @@
 import logo from './logo.svg';
 import './App.css';
-import Create from './components/create';
 import Read from './components/read';
 import Update from './components/update';
 import { Switch } from 'react-router';
@@ -17,13 +16,13 @@ function App() {
         </p>
         < button
           className="App-link"
-          onClick = {() => window.location.href = "https://givemeanicenamefor.auth.us-east-1.amazoncognito.com/login?client_id=2vp20nkl64dfa4da77ojshk7hk&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=https://www.givemeanicenamefor.works/read"
+          onClick = {() => window.location.href = "https://givemeanicenamefor.auth.us-east-1.amazoncognito.com/login?client_id=2vp20nkl64dfa4da77ojshk7hk&response_type=token&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=https://www.givemeanicenamefor.works/read"
           } 
         >
           Login
         </button>
         <Switch>
-          <Route path="/create" component={Create} />
+          {/* <Route path="/create" component={Create} /> */}
           <Route path="/read" component={Read} />
           <Route path="/update" component={Update} />
         </Switch>

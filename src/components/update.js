@@ -5,24 +5,31 @@ import { useHistory } from 'react-router';
 
 export default function Update() {
     let history = useHistory();
+
     const [id, setID] = useState(null);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [checkbox, setCheckbox] = useState(false);
+    const [token, setToken] = useState('');
 
     useEffect(() => {
         setID(localStorage.getItem('ID'))
         setFirstName(localStorage.getItem('First Name'));
         setLastName(localStorage.getItem('Last Name'));
         setCheckbox(localStorage.getItem('Checkbox Value'));
+        setToken(localStorage.getItem('idToken'))
     }, []);
 
     const updateAPIData = () => {
-        axios.patch(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product`, {
-            id,
-            firstName,
-            lastName,
-            checkbox
+        var modifiedData = {
+            updateKey : "firstName",
+            updateValue : firstName,
+        }
+        axios.patch(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product?id=${id}`, {
+            header : {
+                "Authorization" : token
+            },
+            modifiedData
         })
         history.push('/read')
     }

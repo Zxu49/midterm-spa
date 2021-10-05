@@ -12,7 +12,7 @@ export default function Create() {
     const [checkbox, setCheckbox] = useState(false);
 
     const postData = async() => {
-        axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product`, {
+        axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/prod/product`, {
             id,
             firstName,
             lastName,
