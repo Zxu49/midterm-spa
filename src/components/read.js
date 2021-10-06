@@ -5,20 +5,22 @@ import { Link } from 'react-router-dom';
 
 export default function Read() {
     const crypto = require("crypto");
+
     const id = crypto.randomBytes(16).toString("hex");
     const [APIData, setAPIData] = useState([]);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [checkbox, setCheckbox] = useState(false);
+    const [title, setTitle] = useState('');
+    const [job, setJob] = useState('');
+    const [done, setCheckbox] = useState(false);
 
-    const postData = async() => {
+    const postData = () => {
         axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product`, {
-            "id" : id,
-            "firstName" : firstName,
-            "lastName" : lastName,
-            "checkbox" : checkbox 
+            header : {
+            },
+            id,
+            title,
+            job,
         }).then(
-            window.location.reload()
+            setAPIData(APIData)
         )
     }
 
@@ -52,11 +54,11 @@ export default function Read() {
     }
 
     const setData = (data) => {
-        let { id, firstName, lastName, checkbox } = data;
+        let { id, title, job, done } = data;
         localStorage.setItem('ID', id)
-        localStorage.setItem('First Name', firstName);
-        localStorage.setItem('Last Name', lastName);
-        localStorage.setItem('Checkbox Value', checkbox)
+        localStorage.setItem('Title', title);
+        localStorage.setItem('Job', job);
+        localStorage.setItem('Checkbox Value', done)
     }
 
 
@@ -64,24 +66,24 @@ export default function Read() {
         <div>
             <Form className="create-form">
                 <Form.Field>
-                    <label>First Name</label>
-                    <input placeholder='First Name' onChange={(e) => setFirstName(e.target.value)}/>
+                    <label>Title</label>
+                    <input placeholder='Title' onChange={(e) => setTitle(e.target.value)}/>
                 </Form.Field>
                 <Form.Field>
-                    <label>Last Name</label>
-                    <input placeholder='Last Name' onChange={(e) => setLastName(e.target.value)}/>
+                    <label>Job</label>
+                    <input placeholder='Job' onChange={(e) => setJob(e.target.value)}/>
                 </Form.Field>
                 <Form.Field>
-                    <Checkbox label='I agree to the Terms and Conditions' onChange={(e) => setCheckbox(!checkbox)}/>
+                    <Checkbox label='I must finsh it somehow' onChange={(e) => setCheckbox(!done)}/>
                 </Form.Field>
                 <Button onClick={postData} type='submit'>Submit</Button>
             </Form>
             <Table singleLine>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>First Name</Table.HeaderCell>
-                        <Table.HeaderCell>Last Name</Table.HeaderCell>
-                        <Table.HeaderCell>Checkbox Value</Table.HeaderCell>
+                        <Table.HeaderCell>Title</Table.HeaderCell>
+                        <Table.HeaderCell>Job</Table.HeaderCell>
+                        <Table.HeaderCell>Done</Table.HeaderCell>
                         <Table.HeaderCell>Update</Table.HeaderCell>
                         <Table.HeaderCell>Delete</Table.HeaderCell>
                     </Table.Row>
@@ -91,9 +93,9 @@ export default function Read() {
                     {APIData.map((data) => {
                         return (
                             <Table.Row>
-                                <Table.Cell>{data.firstName ? data.firstName : 0}</Table.Cell>
-                                <Table.Cell>{data.lastName ? data.lastName : 0}</Table.Cell>
-                                <Table.Cell>{data.checkbox ? 'Checked' : 'Unchecked'}</Table.Cell>
+                                <Table.Cell>{data.title ? data.title : 0}</Table.Cell>
+                                <Table.Cell>{data.job ? data.job : 0}</Table.Cell>
+                                <Table.Cell>{data.checkbox ? 'Done' : 'No Done'}</Table.Cell>
                                 <Link to='/update'>
                                     <Table.Cell> 
                                         <Button onClick={() => setData(data)}>Update</Button>

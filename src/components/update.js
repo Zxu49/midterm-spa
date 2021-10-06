@@ -14,8 +14,8 @@ export default function Update() {
 
     useEffect(() => {
         setID(localStorage.getItem('ID'))
-        setFirstName(localStorage.getItem('First Name'));
-        setLastName(localStorage.getItem('Last Name'));
+        setFirstName(localStorage.getItem('Job'));
+        setLastName(localStorage.getItem('Title'));
         setCheckbox(localStorage.getItem('Checkbox Value'));
         setToken(localStorage.getItem('idToken'))
     }, []);
