@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import Create from './components/create';
 import Read from './components/read';
 import Update from './components/update';
 import { Switch } from 'react-router';
@@ -22,7 +23,7 @@ function App() {
           Login
         </button>
         <Switch>
-          {/* <Route path="/create" component={Create} /> */}
+          <Route path="/create" component={Create} />
           <Route path="/read" component={Read} />
           <Route path="/update" component={Update} />
         </Switch>

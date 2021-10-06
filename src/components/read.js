@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function Read() {
     const crypto = require("crypto");
-    const firstId = crypto.randomBytes(16).toString("hex");
+    const id = crypto.randomBytes(16).toString("hex");
     const [APIData, setAPIData] = useState([]);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -13,12 +13,13 @@ export default function Read() {
 
     const postData = async() => {
         axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product`, {
-            firstId,
-            firstName,
-            lastName,
-            checkbox 
-        })
-        window.location.reload();
+            "id" : id,
+            "firstName" : firstName,
+            "lastName" : lastName,
+            "checkbox" : checkbox 
+        }).then(
+            window.location.reload()
+        )
     }
 
     useEffect(() => {
@@ -51,16 +52,30 @@ export default function Read() {
     }
 
     const setData = (data) => {
-        let { targetId, newFirstName, newLastName, newCheckbox } = data;
-        localStorage.setItem('ID', targetId)
-        localStorage.setItem('First Name', newFirstName);
-        localStorage.setItem('Last Name', newLastName);
-        localStorage.setItem('Checkbox Value', newCheckbox)
+        let { id, firstName, lastName, checkbox } = data;
+        localStorage.setItem('ID', id)
+        localStorage.setItem('First Name', firstName);
+        localStorage.setItem('Last Name', lastName);
+        localStorage.setItem('Checkbox Value', checkbox)
     }
 
 
     return (
         <div>
+            <Form className="create-form">
+                <Form.Field>
+                    <label>First Name</label>
+                    <input placeholder='First Name' onChange={(e) => setFirstName(e.target.value)}/>
+                </Form.Field>
+                <Form.Field>
+                    <label>Last Name</label>
+                    <input placeholder='Last Name' onChange={(e) => setLastName(e.target.value)}/>
+                </Form.Field>
+                <Form.Field>
+                    <Checkbox label='I agree to the Terms and Conditions' onChange={(e) => setCheckbox(!checkbox)}/>
+                </Form.Field>
+                <Button onClick={postData} type='submit'>Submit</Button>
+            </Form>
             <Table singleLine>
                 <Table.Header>
                     <Table.Row>
@@ -92,20 +107,7 @@ export default function Read() {
                     })}
                 </Table.Body>
             </Table>
-            <Form className="create-form">
-                <Form.Field>
-                    <label>First Name</label>
-                    <input placeholder='First Name' onChange={(e) => setFirstName(e.target.value)}/>
-                </Form.Field>
-                <Form.Field>
-                    <label>Last Name</label>
-                    <input placeholder='Last Name' onChange={(e) => setLastName(e.target.value)}/>
-                </Form.Field>
-                <Form.Field>
-                    <Checkbox label='I agree to the Terms and Conditions' onChange={(e) => setCheckbox(!checkbox)}/>
-                </Form.Field>
-                <Button onClick={postData} type='submit'>Submit</Button>
-            </Form>
+      
         </div>
     )
 }
