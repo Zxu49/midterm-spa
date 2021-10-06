@@ -39,7 +39,7 @@ export default function Read() {
                 }
                 setAPIData(response.data);
             })
-    }, []);
+    }, [APIData]);
 
     const onDelete = (id) => {
         axios.delete(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product?id=${id}`, 
