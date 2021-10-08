@@ -1,35 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Checkbox, Form } from 'semantic-ui-react'
-import axios from 'axios';
+
+import { Button, Form } from 'semantic-ui-react'
 import { useHistory } from 'react-router';
+
+import axios from 'axios';
 
 export default function Update() {
     let history = useHistory();
 
     const [id, setID] = useState(null);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [checkbox, setCheckbox] = useState(false);
+    const [title, setTitle] = useState('');
+    const [job, setJob] = useState('');
     const [token, setToken] = useState('');
 
     useEffect(() => {
         setID(localStorage.getItem('ID'))
-        setFirstName(localStorage.getItem('Job'));
-        setLastName(localStorage.getItem('Title'));
-        setCheckbox(localStorage.getItem('Checkbox Value'));
+        setTitle(localStorage.getItem('Title'));
+        setJob(localStorage.getItem('Job'));
         setToken(localStorage.getItem('idToken'))
     }, []);
 
     const updateAPIData = () => {
-        var modifiedData = {
-            updateKey : "firstName",
-            updateValue : firstName,
-        }
         axios.patch(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product?id=${id}`, {
-            header : {
-                "Authorization" : token
-            },
-            modifiedData
+            updateKey : "title",
+            updateValue : title
+        })
+        axios.patch(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product?id=${id}`, {
+            updateKey : "job",
+            updateValue : job
         })
         history.push('/read')
     }
@@ -37,15 +35,12 @@ export default function Update() {
         <div>
             <Form className="create-form">
                 <Form.Field>
-                    <label>First Name</label>
-                    <input placeholder='First Name' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                    <label>Title</label>
+                    <input placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)}/>
                 </Form.Field>
                 <Form.Field>
-                    <label>Last Name</label>
-                    <input placeholder='Last Name' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
-                </Form.Field>
-                <Form.Field>
-                    <Checkbox label='I agree to the Terms and Conditions' checked={checkbox} onChange={() => setCheckbox(!checkbox)}/>
+                    <label>Job</label>
+                    <input placeholder='Job' value={job} onChange={(e) => setJob(e.target.value)}/>
                 </Form.Field>
                 <Button type='submit' onClick={updateAPIData}>Update</Button>
             </Form>

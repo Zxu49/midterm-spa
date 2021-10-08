@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Form } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import axios from 'axios';
 import { useHistory } from 'react-router';
 
@@ -7,16 +7,14 @@ export default function Create() {
     let history = useHistory();
     const crypto = require("crypto");
     const id = crypto.randomBytes(16).toString("hex");
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [checkbox, setCheckbox] = useState(false);
+    const [title, setTitle] = useState('');
+    const [job, setJob] = useState('');
 
     const postData = async() => {
         axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/prod/product`, {
             id,
-            firstName,
-            lastName,
-            checkbox 
+            title,
+            job,
         })
         history.push('/read')
     }
@@ -24,15 +22,12 @@ export default function Create() {
         <div>
             <Form className="create-form">
                 <Form.Field>
-                    <label>First Name</label>
-                    <input placeholder='First Name' onChange={(e) => setFirstName(e.target.value)}/>
+                    <label>Title</label>
+                    <input placeholder='Title' onChange={(e) => setTitle(e.target.value)}/>
                 </Form.Field>
                 <Form.Field>
-                    <label>Last Name</label>
-                    <input placeholder='Last Name' onChange={(e) => setLastName(e.target.value)}/>
-                </Form.Field>
-                <Form.Field>
-                    <Checkbox label='I agree to the Terms and Conditions' onChange={(e) => setCheckbox(!checkbox)}/>
+                    <label>Job</label>
+                    <input placeholder='Job' onChange={(e) => setJob(e.target.value)}/>
                 </Form.Field>
                 <Button onClick={postData} type='submit'>Submit</Button>
             </Form>
