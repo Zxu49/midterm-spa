@@ -11,21 +11,35 @@ export default function Update() {
     const [id, setID] = useState(null);
     const [title, setTitle] = useState('');
     const [detail, setDetail] = useState('');
+    const [authstr, setToken] = useState('');
 
     useEffect(() => {
         setID(localStorage.getItem('id'))
         setTitle(localStorage.getItem('title'));
         setDetail(localStorage.getItem('detail'));
+        setToken(localStorage.getItem('authstr'));
     }, []);
 
+    let config = {
+        headers: {
+            "Authorization" : authstr
+        }
+    }
+
     const updateAPIData = () => {
-        axios.patch(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product?id=${id}`, {
+        axios.patch(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/prod/product?id=${id}`, {
             updateKey : "title",
             updateValue : title
+        }, config)
+        .catch((err) => {
+            console.log(err)
         })
-        axios.patch(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product?id=${id}`, {
+        axios.patch(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/prod/product?id=${id}`, {
             updateKey : "detail",
             updateValue : detail
+        }, config) 
+        .catch((err) => {
+            console.log(err)
         })
         history.push('/read')
     }

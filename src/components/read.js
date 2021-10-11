@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, Form, Table } from 'semantic-ui-react'
+import { Button, Divider, Form, Input, Label, Table, TextArea, Pagination } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -16,11 +16,11 @@ export default function Read(props) {
     const date = new Date().toISOString();
 
     const idToken = queryParams.get('id_token');
-    const AuthStr = 'Bearer '.concat(idToken); 
+    const authstr = 'Bearer '.concat(idToken); 
 
     let config = {
         headers: {
-            "Authorization" : AuthStr
+            "Authorization" : authstr
         }
     }
 
@@ -33,22 +33,28 @@ export default function Read(props) {
                     console.log(response.data)
                 }
                 setAPIData(response.data);
+            }).catch((err) => {
+                console.log(err)
             })
     }, [APIData]); 
 
     const postData = () => {
         var newPost = { id, title, detail, date }
-        axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product`, newPost, config)
+        axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/prod/product`, newPost, config)
         .then((response) => {
             console.log(response.data)
             setAPIData(APIData)
+        }).catch((err) => {
+            console.log(err)
         })
     }
 
     const onDelete = (id) => {
-        axios.delete(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product?id=${id}`, {}, config)
+        axios.delete(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/prod/product?id=${id}`, config)
         .then(() => {
             setAPIData(APIData.filter(d => d.id !== id));
+        }).catch((err) => {
+            console.log(err)
         })
     }
 
@@ -57,6 +63,7 @@ export default function Read(props) {
         localStorage.setItem('id', id);
         localStorage.setItem('title', title);
         localStorage.setItem('detail', detail);
+        localStorage.setItem('authstr', authstr);
     }
 
 
@@ -64,12 +71,12 @@ export default function Read(props) {
         <Divider>
             <Form className="create-form">
                 <Form.Field>
-                    <label>Title</label>
-                    <input placeholder='Title' onChange={(e) => setTitle(e.target.value)}/>
+                    <Label>Title</Label>
+                    <Input placeholder='Title' onChange={(e) => setTitle(e.target.value)}/>
                 </Form.Field>
                 <Form.Field>
-                    <label>Detail</label>
-                    <textarea placeholder='Detail' onChange={(e) => setDetail(e.target.value)}/>
+                    <Label>Detail</Label>
+                    <TextArea placeholder='Detail' onChange={(e) => setDetail(e.target.value)}/>
                 </Form.Field>
                 <Button onClick={postData} type='submit'>Submit</Button>
             </Form>
@@ -77,7 +84,7 @@ export default function Read(props) {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Title</Table.HeaderCell>
-                        <Table.HeaderCell>Job</Table.HeaderCell>
+                        <Table.HeaderCell>Detail</Table.HeaderCell>
                         <Table.HeaderCell>Date</Table.HeaderCell>
                         <Table.HeaderCell>Update</Table.HeaderCell>
                         <Table.HeaderCell>Delete</Table.HeaderCell>
