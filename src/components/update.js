@@ -53,7 +53,7 @@ export default function Update() {
                     <input placeholder='Detail' value={detail} onChange={(e) => setDetail(e.target.value)}/>
                 </Form.Field>
                 <Link to='/read'>
-                    <Button type='submit' onClick={updateAPIData}>Update</Button>
+                    <Button color="blue" type='submit' onClick={updateAPIData}>Update</Button>
                 </Link>
             </Form>
         </div>
