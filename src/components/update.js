@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from 'react';
 
 import { Button, Form } from 'semantic-ui-react'
-import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 
 export default function Update() {
-    let history = useHistory();
-
     const [id, setID] = useState(null);
     const [title, setTitle] = useState('');
     const [detail, setDetail] = useState('');
-    const [authstr, setToken] = useState('');
+    const [idToken, setToken] = useState('');
 
     useEffect(() => {
         setID(localStorage.getItem('id'))
         setTitle(localStorage.getItem('title'));
         setDetail(localStorage.getItem('detail'));
-        setToken(localStorage.getItem('authstr'));
+        setToken(localStorage.getItem('id_token'));
     }, []);
 
     let config = {
         headers: {
-            "Authorization" : authstr
+            "Authorization" : 'Bearer '.concat(idToken) 
         }
     }
 
@@ -41,7 +39,6 @@ export default function Update() {
         .catch((err) => {
             console.log(err)
         })
-        history.push('/read')
     }
 
     return (
@@ -55,7 +52,9 @@ export default function Update() {
                     <label>Detail</label>
                     <input placeholder='Detail' value={detail} onChange={(e) => setDetail(e.target.value)}/>
                 </Form.Field>
-                <Button type='submit' onClick={updateAPIData}>Update</Button>
+                <Link to='/read'>
+                    <Button type='submit' onClick={updateAPIData}>Update</Button>
+                </Link>
             </Form>
         </div>
     )

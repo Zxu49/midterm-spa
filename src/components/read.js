@@ -4,17 +4,12 @@ import { Button, Divider, Form, Input, Label, Table, TextArea, Pagination } from
 import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function Read(props) {
-
+export default function Read() {
     const [APIData, setAPIData] = useState([]);
     const [title, setTitle] = useState('');
     const [detail, setDetail] = useState('');
     
     const queryParams = new URLSearchParams(window.location.hash.substr(1));
-
-    const id = uuidv4();
-    const date = new Date().toISOString();
-
     const idToken = queryParams.get('id_token');
     const authstr = 'Bearer '.concat(idToken); 
 
@@ -39,12 +34,17 @@ export default function Read(props) {
     }, [APIData]); 
 
     const postData = () => {
+        const id = uuidv4();
+        const date = new Date().toISOString();
         var newPost = { id, title, detail, date }
         axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/prod/product`, newPost, config)
         .then((response) => {
             console.log(response.data)
             setAPIData(APIData)
         }).catch((err) => {
+            if (idToken === null) {
+                alert('You are not login')
+            }
             console.log(err)
         })
     }
@@ -54,6 +54,9 @@ export default function Read(props) {
         .then(() => {
             setAPIData(APIData.filter(d => d.id !== id));
         }).catch((err) => {
+            if (idToken === null) {
+                alert('You are not login')
+            }
             console.log(err)
         })
     }
@@ -63,7 +66,7 @@ export default function Read(props) {
         localStorage.setItem('id', id);
         localStorage.setItem('title', title);
         localStorage.setItem('detail', detail);
-        localStorage.setItem('authstr', authstr);
+        localStorage.setItem('id_token', idToken);
     }
 
 
