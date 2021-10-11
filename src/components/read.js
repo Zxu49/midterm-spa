@@ -1,22 +1,21 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Divider, Form, Table } from 'semantic-ui-react'
+import { Button, Divider, Form, Table } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Read(props) {
-    const crypto = require("crypto");
 
-
-    const id = crypto.randomBytes(16).toString("hex");
     const [APIData, setAPIData] = useState([]);
     const [title, setTitle] = useState('');
-    const [job, setJob] = useState('');
-    const [done, setCheckbox] = useState(false);
-    const current = new Date();
-    const date = `${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`;
+    const [detail, setDetail] = useState('');
+    
     const queryParams = new URLSearchParams(window.location.hash.substr(1));
+
+    const id = uuidv4();
+    const date = new Date().toISOString();
+
     const idToken = queryParams.get('id_token');
-    const accessToken = queryParams.get('access_token');
     const AuthStr = 'Bearer '.concat(idToken); 
 
     let config = {
@@ -26,7 +25,7 @@ export default function Read(props) {
     }
 
     useEffect(() => {
-        axios.get(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/prod/products`, {} , config)
+        axios.get(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/products`)
         .then((response) => {
                 if (response.status !== 200) {
                     throw Error(response.statusText);
@@ -38,7 +37,7 @@ export default function Read(props) {
     }, [APIData]); 
 
     const postData = () => {
-        var newPost = { id, title, job, date}
+        var newPost = { id, title, detail, date }
         axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product`, newPost, config)
         .then((response) => {
             console.log(response.data)
@@ -54,12 +53,10 @@ export default function Read(props) {
     }
 
     const setData = (data) => {
-        let { id, title, job, done } = data;
-        localStorage.setItem('ID', id)
-        localStorage.setItem('Title', title);
-        localStorage.setItem('Job', job);
-        localStorage.setItem('Checkbox Value', done)
-        localStorage.setItem('IdToken', idToken)
+        let { id, title, detail } = data;
+        localStorage.setItem('id', id);
+        localStorage.setItem('title', title);
+        localStorage.setItem('detail', detail);
     }
 
 
@@ -71,11 +68,8 @@ export default function Read(props) {
                     <input placeholder='Title' onChange={(e) => setTitle(e.target.value)}/>
                 </Form.Field>
                 <Form.Field>
-                    <label>Job</label>
-                    <input placeholder='Job' onChange={(e) => setJob(e.target.value)}/>
-                </Form.Field>
-                <Form.Field>
-                    <Checkbox label='Done' onChange={(e) => setCheckbox(!done)}/>
+                    <label>Detail</label>
+                    <textarea placeholder='Detail' onChange={(e) => setDetail(e.target.value)}/>
                 </Form.Field>
                 <Button onClick={postData} type='submit'>Submit</Button>
             </Form>
@@ -85,7 +79,6 @@ export default function Read(props) {
                         <Table.HeaderCell>Title</Table.HeaderCell>
                         <Table.HeaderCell>Job</Table.HeaderCell>
                         <Table.HeaderCell>Date</Table.HeaderCell>
-                        <Table.HeaderCell>Done</Table.HeaderCell>
                         <Table.HeaderCell>Update</Table.HeaderCell>
                         <Table.HeaderCell>Delete</Table.HeaderCell>
                     </Table.Row>
@@ -95,9 +88,8 @@ export default function Read(props) {
                         return (
                             <Table.Row key={data.id}>
                                 <Table.Cell>{data.title ? data.title : 'Deafult title'}</Table.Cell>
-                                <Table.Cell>{data.job ? data.job : 'Something'}</Table.Cell>
+                                <Table.Cell>{data.detail ? data.detail : 'Something'}</Table.Cell>
                                 <Table.Cell>{data.date}</Table.Cell>
-                                <Table.Cell>{data.checkbox ? 'Done' : 'No Done'}</Table.Cell>
                                 <Table.Cell> 
                                     <Link to='/update'>
                                         <Button onClick={() => setData(data)}>Update</Button>

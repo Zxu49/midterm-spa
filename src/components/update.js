@@ -10,14 +10,12 @@ export default function Update() {
 
     const [id, setID] = useState(null);
     const [title, setTitle] = useState('');
-    const [job, setJob] = useState('');
-    const [token, setToken] = useState('');
+    const [detail, setDetail] = useState('');
 
     useEffect(() => {
-        setID(localStorage.getItem('ID'))
-        setTitle(localStorage.getItem('Title'));
-        setJob(localStorage.getItem('Job'));
-        setToken(localStorage.getItem('idToken'))
+        setID(localStorage.getItem('id'))
+        setTitle(localStorage.getItem('title'));
+        setDetail(localStorage.getItem('detail'));
     }, []);
 
     const updateAPIData = () => {
@@ -26,11 +24,12 @@ export default function Update() {
             updateValue : title
         })
         axios.patch(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/dev/product?id=${id}`, {
-            updateKey : "job",
-            updateValue : job
+            updateKey : "detail",
+            updateValue : detail
         })
         history.push('/read')
     }
+
     return (
         <div>
             <Form className="create-form">
@@ -39,8 +38,8 @@ export default function Update() {
                     <input placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)}/>
                 </Form.Field>
                 <Form.Field>
-                    <label>Job</label>
-                    <input placeholder='Job' value={job} onChange={(e) => setJob(e.target.value)}/>
+                    <label>Detail</label>
+                    <input placeholder='Detail' value={detail} onChange={(e) => setDetail(e.target.value)}/>
                 </Form.Field>
                 <Button type='submit' onClick={updateAPIData}>Update</Button>
             </Form>

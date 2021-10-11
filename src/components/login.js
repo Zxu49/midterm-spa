@@ -4,7 +4,7 @@ import logo from '../logo.svg';
 export default function Login() {
   const clientId = "2vp20nkl64dfa4da77ojshk7hk"
   const host = "https://givemeanicenamefor.auth.us-east-1.amazoncognito.com"
-  const testUrl = host + "/login?client_id="+clientId+"&response_type=token&redirect_uri=http://localhost:3000/read"
+  // const hostUrl = host + "/login?client_id="+clientId+"&response_type=token&redirect_uri=http://localhost:3000/read"
   const hostUrl = host + "/login?client_id="+clientId+"&response_type=token&redirect_uri=https://www.givemeanicenamefor.works/read"
 
   return (

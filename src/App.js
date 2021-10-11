@@ -10,9 +10,10 @@ import Login from './components/login';
 function App() {
     return (
       <Switch>
-        <Route exact path="/login"  component={Login} />
-        <Route exact path="/read"  component={Read} />
-        <Route exact path="/update"  component={Update} />
+        <Route exact path="/"  component={Login} />
+        <Route path="/read"  component={Read} />
+        <Route path="/update"  component={Update} />
+        <Redirect to="/" />
       </Switch>
     );
 }
