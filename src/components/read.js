@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Segment, Grid, Container, Button, Form, Input, Label, Table, TextArea } from 'semantic-ui-react'
+import { Divider, Header, Icon, Segment, Container, Button, Form, Input, Label, Table, TextArea } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -70,10 +70,17 @@ export default function Read() {
         localStorage.setItem('id_token', idToken);
     }
 
+    const logOut = () => {
+        localStorage.clear()
+    }
 
     return (
         <Container>
-            <Grid>
+            <Divider hidden />
+            <Header as="h1" floated="left">
+            <Icon name="react" /> CURD SPA
+            </Header>
+            <Divider hidden clearing />
                 <Segment className="sideBar" textAlign="left">
                     <Form className="create-form">
                         <Form.Field>
@@ -85,9 +92,10 @@ export default function Read() {
                             <TextArea placeholder='Detail' onChange={(e) => setDetail(e.target.value)}/>
                         </Form.Field>
                         <Button color="green" onClick={postData} type='submit'>Submit</Button>
+                        <Link to='/' floated='right'>
+                            <Button color="grey" onClick={logOut} type='submit'>Logout</Button>
+                        </Link>
                     </Form>
-                </Segment>
-                <Segment>
                     <Table singleLine>
                         <Table.Header>
                             <Table.Row>
@@ -127,7 +135,6 @@ export default function Read() {
                         </Table.Body>
                     </Table>
                 </Segment>
-            </Grid>
         </Container>
     )
 }
