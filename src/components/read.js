@@ -28,7 +28,8 @@ export default function Read() {
                 } else {
                     console.log(response.data)
                 }
-                setAPIData(response.data);
+                const sorted = [].concat(response.data.sort((a, b) => new Date(a.date) - new Date(b.date) < 0 ? 1 : -1))
+                setAPIData(sorted);
             }).catch((err) => {
                 console.log(err)
             })
@@ -134,7 +135,7 @@ export default function Read() {
                                 return (
                                     <Table.Row key={data.id}>
                                         <Table.Cell>{data.title ? data.title : 'Deafult title'}</Table.Cell>
-                                        <Table.Cell>{data.detail ? data.detail : 'Something'}</Table.Cell>
+                                        <Table.Cell>{data.detail ? data.detail.length < 12 ? data.detail : data.detail.substr(1,12) + '...' : 'Something'}</Table.Cell>
                                         <Table.Cell>{data.date}</Table.Cell>
                                         <Table.Cell> 
                                             {link}
