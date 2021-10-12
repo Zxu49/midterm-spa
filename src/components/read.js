@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Grid, Container, Button, Form, Input, Label, Table, TextArea } from 'semantic-ui-react'
+import { Segment, Grid, Container, Button, Form, Input, Label, Table, TextArea } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -73,9 +73,8 @@ export default function Read() {
 
     return (
         <Container>
-        <Container>
-            <Grid columns={4} relaxed='very'>
-                <Grid.Column>
+            <Grid>
+                <Segment className="sideBar" textAlign="left">
                     <Form className="create-form">
                         <Form.Field>
                             <Label>Title</Label>
@@ -87,9 +86,8 @@ export default function Read() {
                         </Form.Field>
                         <Button color="green" onClick={postData} type='submit'>Submit</Button>
                     </Form>
-                </Grid.Column>
-
-                <Grid.Column>
+                </Segment>
+                <Segment>
                     <Table singleLine>
                         <Table.Header>
                             <Table.Row>
@@ -104,11 +102,13 @@ export default function Read() {
                             {APIData.map((data) => {
                                 let link = null
                                 if (idToken) {
-                                    link = <Link to='/update'>
+                                    link = 
+                                    <Link to='/update'>
                                         <Button color="blue" onClick={() => setData(data)}>Update</Button>
                                     </Link>
                                 } else {
-                                    link = <Button color="blue" onClick={() => alert('You are not login')}>Update</Button>
+                                    link = 
+                                        <Button color="blue" onClick={() => alert('You are not login')}>Update</Button>
                                 }
                                 return (
                                     <Table.Row key={data.id}>
@@ -126,9 +126,8 @@ export default function Read() {
                             })}
                         </Table.Body>
                     </Table>
-                </Grid.Column>
+                </Segment>
             </Grid>
-        </Container>
         </Container>
     )
 }
