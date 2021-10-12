@@ -90,7 +90,7 @@ export default function Read() {
         <Container>
             <Divider hidden />
             <Header as="h1" floated="left">
-            <Icon name="react" /> CURD SPA
+            <Icon name="react" /> CRUD SPA
             </Header>
             <Divider hidden clearing />
                 <Segment className="sideBar" textAlign="left">
@@ -116,9 +116,7 @@ export default function Read() {
                                 <Table.HeaderCell>Title</Table.HeaderCell>
                                 <Table.HeaderCell>Detail</Table.HeaderCell>
                                 <Table.HeaderCell>Date</Table.HeaderCell>
-                                <Table.HeaderCell>Update</Table.HeaderCell>
-                                <Table.HeaderCell>Delete</Table.HeaderCell>
-                                <Table.HeaderCell>More</Table.HeaderCell>
+                                <Table.HeaderCell>Action</Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
@@ -135,22 +133,18 @@ export default function Read() {
                                 }
                                 return (
                                     <Table.Row key={data.id}>
-                                        <Table.Cell>{data.title ? data.title.length < 5 ? data.title : data.title.substr(1,5) + '...' : 'Deafult title'}</Table.Cell>
-                                        <Table.Cell>{data.detail ? data.detail.length < 12 ? data.detail : data.detail.substr(1,12) + '...' : 'Something'}</Table.Cell>
+                                        <Table.Cell>{data.title ? data.title.length < 5 ? data.title : data.title.substr(0,5) + '...' : 'Deafult title'}</Table.Cell>
+                                        <Table.Cell>{data.detail ? data.detail.length < 24 ? data.detail : data.detail.substr(0,24) + '...' : 'Something'}</Table.Cell>
                                         <Table.Cell>{data.date}</Table.Cell>
                                         <Table.Cell> 
                                             {link}
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            <Button color="red" onClick={() => onDelete(data.id)}>Delete</Button>
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                        <Modal
-                                            trigger={<Button color="orange" >more</Button>}
+                                            <Modal
+                                            trigger={<Button color="orange" >More</Button>}
                                             header= {data.title}
                                             content= {data.detail}
                                             actions={['Close']}
-                                        />
+                                            />
+                                            <Button color="red" onClick={() => onDelete(data.id)}>Delete</Button>
                                         </Table.Cell>
                                     </Table.Row>
                                 )
