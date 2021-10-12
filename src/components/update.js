@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Button, Form } from 'semantic-ui-react'
+import { Label, Input, Button, Container, Form, Header, Icon, Divider, Segment, TextArea } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 
 import axios from 'axios';
@@ -42,20 +42,27 @@ export default function Update() {
     }
 
     return (
-        <div>
+        <Container>
+            <Divider hidden clearing />
+            <Header as="h1" floated="left">
+            <Icon name="react" /> Update Page
+            </Header>
+            <Divider hidden clearing />
+            <Segment className="sideBar" textAlign="left">
             <Form className="create-form">
                 <Form.Field>
-                    <label>Title</label>
-                    <input placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)}/>
+                    <Label>Title</Label>
+                    <Input placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)}/>
                 </Form.Field>
                 <Form.Field>
-                    <label>Detail</label>
-                    <input placeholder='Detail' value={detail} onChange={(e) => setDetail(e.target.value)}/>
+                    <Label>Detail</Label>
+                    <TextArea placeholder='Detail' value={detail} onChange={(e) => setDetail(e.target.value)}/>
                 </Form.Field>
                 <Link to='/read'>
                     <Button color="blue" type='submit' onClick={updateAPIData}>Update</Button>
                 </Link>
             </Form>
-        </div>
+            </Segment>
+        </Container>
     )
 }

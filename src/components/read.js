@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Divider, Header, Icon, Segment, Container, Button, Form, Input, Label, Table, TextArea } from 'semantic-ui-react'
+import { Modal, Divider, Header, Icon, Segment, Container, Button, Form, Input, Label, Table, TextArea } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -11,7 +11,7 @@ export default function Read() {
     const [pageNumber, setPageNumber] = useState(0);
     
     const queryParams = new URLSearchParams(window.location.hash.substr(1));
-    const idToken = queryParams.get('id_token');
+    const idToken = queryParams.get('id_token') !== null ? queryParams.get('id_token') : localStorage.getItem('id_token');
     const authstr = 'Bearer '.concat(idToken); 
 
     let config = {
@@ -118,6 +118,7 @@ export default function Read() {
                                 <Table.HeaderCell>Date</Table.HeaderCell>
                                 <Table.HeaderCell>Update</Table.HeaderCell>
                                 <Table.HeaderCell>Delete</Table.HeaderCell>
+                                <Table.HeaderCell>More</Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
@@ -134,7 +135,7 @@ export default function Read() {
                                 }
                                 return (
                                     <Table.Row key={data.id}>
-                                        <Table.Cell>{data.title ? data.title : 'Deafult title'}</Table.Cell>
+                                        <Table.Cell>{data.title ? data.title.length < 5 ? data.title : data.title.substr(1,5) + '...' : 'Deafult title'}</Table.Cell>
                                         <Table.Cell>{data.detail ? data.detail.length < 12 ? data.detail : data.detail.substr(1,12) + '...' : 'Something'}</Table.Cell>
                                         <Table.Cell>{data.date}</Table.Cell>
                                         <Table.Cell> 
@@ -142,6 +143,14 @@ export default function Read() {
                                         </Table.Cell>
                                         <Table.Cell>
                                             <Button color="red" onClick={() => onDelete(data.id)}>Delete</Button>
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                        <Modal
+                                            trigger={<Button color="orange" >more</Button>}
+                                            header= {data.title}
+                                            content= {data.detail}
+                                            actions={['Close']}
+                                        />
                                         </Table.Cell>
                                     </Table.Row>
                                 )
