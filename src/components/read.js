@@ -8,6 +8,7 @@ export default function Read() {
     const [APIData, setAPIData] = useState([]);
     const [title, setTitle] = useState('');
     const [detail, setDetail] = useState('');
+    const [pageNumber, setPageNumber] = useState(0);
     
     const queryParams = new URLSearchParams(window.location.hash.substr(1));
     const idToken = queryParams.get('id_token');
@@ -74,6 +75,16 @@ export default function Read() {
         localStorage.clear()
     }
 
+    const nextPage = () => {
+        const newPage = pageNumber + 5 > APIData.length ? pageNumber : pageNumber + 5
+        setPageNumber(newPage)
+    }
+
+    const prevPage = () => {
+        const newPage = pageNumber - 5 < 0 ? pageNumber : pageNumber - 5
+        setPageNumber(newPage)    
+    }
+
     return (
         <Container>
             <Divider hidden />
@@ -95,6 +106,8 @@ export default function Read() {
                         <Link to='/' floated='right'>
                             <Button color="grey" onClick={logOut} type='submit'>Logout</Button>
                         </Link>
+                        <Button onClick={prevPage} type='submit'>prev</Button>
+                        <Button onClick={nextPage} type='submit'>next</Button>
                     </Form>
                     <Table singleLine>
                         <Table.Header>
@@ -107,7 +120,7 @@ export default function Read() {
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                            {APIData.map((data) => {
+                            {APIData.slice(pageNumber,pageNumber+5).map((data) => {
                                 let link = null
                                 if (idToken) {
                                     link = 
@@ -135,6 +148,7 @@ export default function Read() {
                         </Table.Body>
                     </Table>
                 </Segment>
+            <Divider hidden clearing />
         </Container>
     )
 }
