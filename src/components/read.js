@@ -9,6 +9,7 @@ export default function Read() {
     const [title, setTitle] = useState('');
     const [detail, setDetail] = useState('');
     const [pageNumber, setPageNumber] = useState(0);
+    const [len, setLength] = useState(0);
     
     const queryParams = new URLSearchParams(window.location.hash.substr(1));
     const idToken = queryParams.get('id_token') !== null ? queryParams.get('id_token') : localStorage.getItem('id_token');
@@ -30,10 +31,11 @@ export default function Read() {
                 }
                 const sorted = [].concat(response.data.sort((a, b) => new Date(a.date) - new Date(b.date) < 0 ? 1 : -1))
                 setAPIData(sorted);
+                setLength(len);
             }).catch((err) => {
                 console.log(err)
             })
-    }, [APIData]); 
+    }, [len]); 
 
     const postData = () => {
         if (idToken === null) {
@@ -45,6 +47,7 @@ export default function Read() {
             axios.post(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/prod/product`, newPost, config)
             .then(() => {
                 setAPIData(APIData)
+                setLength(APIData.length)
             }).catch((err) => {
                 console.log(err)
             })
@@ -58,6 +61,7 @@ export default function Read() {
             axios.delete(`https://sbzq27tawc.execute-api.us-east-1.amazonaws.com/prod/product?id=${id}`, config)
             .then(() => {
                 setAPIData(APIData.filter(d => d.id !== id));
+                setLength(APIData.length)
             }).catch((err) => {
                 console.log(err)
             })
